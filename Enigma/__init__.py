@@ -7,3 +7,4 @@ __description__ = "Welcome to Enigma simulator by {}, version {}".format(
 print(__description__)
 from .enigma import Enigma
 from .anim import Animation
+from .rotor import Rotor

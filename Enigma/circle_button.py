@@ -97,15 +97,3 @@ class CircleButton:
             return True
         else:
             return False
-
-    def set_text(self, text, fontname="Arial", fontsize=None):
-        self.text = text
-        self.fontname = fontname
-        if not fontsize == None:
-            self.fontsize = fontsize
-        self.font = pyg.font.SysFont(self.fontname, self.fontsize)
-        self.text_width, self.text_height = pyg.font.Font.size(self.font, self.text)
-        self.buttonUP = pyg.Surface((self.radius, self.radius))
-        self.buttonDOWN = pyg.Surface((self.radius, self.radius))
-        self.buttonHOVER = pyg.Surface((self.radius, self.radius))
-        self.__update__()

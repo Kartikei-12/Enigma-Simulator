@@ -26,7 +26,8 @@ class Animation:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("Enigma Simulator")
-        self.en_obj = Enigma(alphabet=ANIM_ALPHABET)
+        self.n_rotors = 2
+        self.en_obj = Enigma(alphabet=ANIM_ALPHABET, n_rotors=self.n_rotors)
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.width, self.height = self.screen.get_size()
         self.quit_button = RectangularButton(
@@ -75,6 +76,25 @@ class Animation:
                 )
             )
             i += 1
+
+        WIDTH = int(self.width / (self.n_rotors + 3 + 1))
+        HEIGHT = int(self.height * 0.75)
+        LEFT_MARGIN = LEFT_MARGIN + 2 * RADIUS + 60
+        TOP_MARGIN = int(self.height * 0.12)
+        SEPRATION = int(self.width * 0.2)
+        self.rotors = list()
+        for i in range(self.n_rotors):
+            self.rotors.append(self.en_obj.rotors[i])
+            self.rotors[-1].animate(
+                x=LEFT_MARGIN + i * SEPRATION,
+                y=TOP_MARGIN,
+                width=WIDTH,
+                height=HEIGHT,
+                background=BACKGROUND_COLOR,
+            )
+        # self.rotor_1 = self.en_obj.rotors[0]
+        # self.rotor_1.animate(x=500, y=200, width=100, height=200)
+
         self.start()
 
     def wait(self, t):
@@ -89,10 +109,16 @@ class Animation:
         """"""
         self.screen.fill(BACKGROUND_COLOR)
         self.quit_button.draw(self.screen)
+
         for button in self.in_buttons:
             button.draw(self.screen)
         for button in self.out_buttons:
             button.draw(self.screen)
+
+        # self.rotor_1.draw(self.screen)
+        for rotor in self.rotors:
+            rotor.draw(self.screen)
+
         pygame.display.update()
 
     def start(self):

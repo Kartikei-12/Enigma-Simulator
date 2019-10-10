@@ -4,12 +4,16 @@ Contains main Enigma class for the project
 
 Author: Kartikei Mittal"""
 
+# Python module(s)
 import os
 import json
-import random
 from pprint import pprint
 
-from .env import NUMBER_OF_ROTORS, ALPHABET, DEFAULT_FILE_NAME, TRAIL_LIMIT
+# Project Module(s)
+from .rotor import Rotor
+
+# Environment Variable(s)
+from .env import NUMBER_OF_ROTORS, ALPHABET, DEFAULT_FILE_NAME
 
 
 class Enigma:
@@ -19,9 +23,17 @@ class Enigma:
         configration_file(str): Name of confirigation file for enigma machine,
         pass 'None' or nothing if to generate new confirigation file"""
 
-    def __init__(self, configration_file=None, alphabet=ALPHABET, save_config=False):
+    def __init__(
+        self,
+        configration_file=None,
+        alphabet=ALPHABET,
+        save_config=False,
+        n_rotors=NUMBER_OF_ROTORS,
+    ):
         self.alpha_len = len(alphabet)
         self.alphabet = alphabet
+        self.n_rotors = n_rotors
+        self.rotors = list()
         if configration_file == None:
             print("Generating new confirigation")
             self.config_file_name = DEFAULT_FILE_NAME
@@ -33,10 +45,6 @@ class Enigma:
             print("Loading confirigation file")
             self.config_file_name = configration_file
             self.config_dict = self.load_config()
-        self.n_rotors = self.config_dict["n_rotors"]
-        self.rotor_pos = list()
-        for i in range(self.n_rotors):
-            self.rotor_pos.append(self.config_dict["positions"][i])
 
     def get_congig_file_name(self):
         """Returns config file name"""
@@ -49,7 +57,21 @@ class Enigma:
     def load_config(self):
         """Loads confirigation file"""
         with open(self.config_file_name, "r") as f:
-            return json.loads(f.read())
+            config_dict = json.loads(f.read())
+        self.rotors = list()
+        self.n_rotors = config_dict["n_rotors"]
+        self.alphabet = config_dict["alphabet"]
+        self.plug = config_dict["plug_board"]
+        self.reflect = config_dict["reflection"]
+        for i in range(self.n_rotors):
+            self.rotors.append(
+                Rotor(
+                    k_dict=config_dict["rotors"][i],
+                    alphabet=self.alphabet,
+                    pos=config_dict["positions"][i],
+                )
+            )
+        return config_dict
 
     def save_config(self):
         """Saves confirigation file"""
@@ -58,55 +80,40 @@ class Enigma:
         with open(self.config_file_name, "w") as f:
             f.write(json.dumps(self.config_dict))
 
-    def get_rotor_positions(self):
-        """Returns current of the rotors"""
-        return self.rotor_pos
-
     def update_config_dict(self):
         """Updates confirigation dictionary"""
         for i in range(self.n_rotors):
-            self.config_dict["positions"][i] = self.rotor_pos[i]
+            self.config_dict["positions"][i] = self.rotors[i].pos
 
-    def reset_config_dict(self):
+    def reset_from_config_dict(self):
         """Updates confirigation dictionary"""
         for i in range(self.n_rotors):
-            self.rotor_pos[i] = self.config_dict["positions"][i]
+            self.rotors[i].pos = self.config_dict["positions"][i]
 
     def get_plug_value(self, char):
         """Fetches plug board value"""
-        return self.config_dict["plug_board"][char]
+        return self.plug[char]
 
     def get_reflection_value(self, char):
         """Fetches reflection board value"""
-        return self.config_dict["reflection"][char]
+        return self.reflect[char]
 
     def rotate_rotor(self, rotor_no):
         """Rotates rotor with given index"""
-        self.rotor_pos[rotor_no] = (self.rotor_pos[rotor_no] + 1) % self.alpha_len
-        if rotor_no != (self.n_rotors - 1) and self.rotor_pos[rotor_no] == 0:
+        self.rotors[rotor_no].rotate()
+        if rotor_no != (self.n_rotors - 1) and self.rotors[rotor_no].pos == 0:
             self.rotate_rotor(rotor_no + 1)
-
-    def get_rotor_value(self, rotor_no, char):
-        """Fetches rotor value"""
-        rotor_char = char
-        rotor = self.config_dict["rotors"][rotor_no]
-        value = rotor[rotor_char]
-        return value
-
-    def move(self, char, pos):
-        """Moves chracter forward"""
-        return chr(((ord(char) - ord("A") + pos) % self.alpha_len) + ord("A"))
 
     def process_char(self, char):
         char = self.get_plug_value(char)
 
         for i in range(self.n_rotors):
-            char = self.move(char, self.rotor_pos[i])
-            char = self.get_rotor_value(i, char)
+            char = self.rotors[i].move(char)
+            char = self.rotors[i][char]
         char = self.get_reflection_value(char)
         for i in range(self.n_rotors - 1, -1, -1):
-            char = self.get_rotor_value(i, char)
-            char = self.move(char, -1 * self.rotor_pos[i])
+            char = self.rotors[i][char]
+            char = self.rotors[i].move(char, by=-1)
 
         self.rotate_rotor(0)
         char = self.get_plug_value(char)
@@ -122,36 +129,22 @@ class Enigma:
                 processed_str += char
         return processed_str
 
-    def generate_reflection_board(self):
-        """Generates confirigation for reflection board"""
-        reflection_rotor = dict()
-        ALPHABET_copy = self.alphabet.copy()
-        for character in self.alphabet:
-            if character not in ALPHABET_copy:
-                continue
-            count = 0
-            reflection_rotor[character] = random.choice(ALPHABET_copy)
-            reflection_rotor[reflection_rotor[character]] = character
-            while character == reflection_rotor[character]:
-                reflection_rotor[character] = random.choice(ALPHABET_copy)
-                reflection_rotor[reflection_rotor[character]] = character
-                count += 1
-                if count == TRAIL_LIMIT:
-                    raise Exception("Error in random sampaling")
-            ALPHABET_copy.remove(character)
-            ALPHABET_copy.remove(reflection_rotor[character])
-        return reflection_rotor
-
     def generate_confirigation_dict(self):
         """Generates configrigation dictionary"""
+        self.rotors = list()
+        self.reflect = Rotor(alphabet=self.alphabet)
+        self.plug = Rotor(alphabet=self.alphabet)
         config_dict = {
-            "n_rotors": NUMBER_OF_ROTORS,
-            "reflection": self.generate_reflection_board(),
-            "plug_board": self.generate_reflection_board(),
+            "alphabet": self.alphabet,
+            "n_rotors": self.n_rotors,
+            "reflection": self.reflect.k_dict,
+            "plug_board": self.plug.k_dict,
             "rotors": list(),
             "positions": list(),
         }
-        for i in range(NUMBER_OF_ROTORS):
-            config_dict["positions"].append(random.randint(0, self.alpha_len))
-            config_dict["rotors"].append(self.generate_reflection_board())
+        for i in range(self.n_rotors):
+            r = Rotor(alphabet=self.alphabet)
+            self.rotors.append(r)
+            config_dict["positions"].append(r.pos)
+            config_dict["rotors"].append(r.k_dict)
         return config_dict
