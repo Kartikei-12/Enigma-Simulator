@@ -105,26 +105,33 @@ class Enigma:
             self.rotate_rotor(rotor_no + 1)
 
     def process_char(self, char):
+        """"""
+        out_arr = list()
         char = self.get_plug_value(char)
-
+        out_arr.append(char)
         for i in range(self.n_rotors):
             char = self.rotors[i].move(char)
+            out_arr.append(char)
             char = self.rotors[i][char]
+            out_arr.append(char)
         char = self.get_reflection_value(char)
+        out_arr.append(char)
         for i in range(self.n_rotors - 1, -1, -1):
             char = self.rotors[i][char]
+            out_arr.append(char)
             char = self.rotors[i].move(char, by=-1)
+            out_arr.append(char)
 
-        self.rotate_rotor(0)
         char = self.get_plug_value(char)
-        return char
+        self.rotate_rotor(0)
+        return (char, out_arr)
 
     def process(self, org_string):
         """Main processing method"""
         processed_str = ""
         for char in org_string:
             if char in self.alphabet:
-                processed_str += self.process_char(char)
+                processed_str += self.process_char(char)[0]
             else:
                 processed_str += char
         return processed_str

@@ -23,10 +23,5 @@ def main():
     an = Animation()
 
 
-# def main():
-#     from Enigma import Rotor
-#     r = Rotor(alphabet=["A", "B", "C", "D"])
-
-
 if __name__ == "__main__":
     main()

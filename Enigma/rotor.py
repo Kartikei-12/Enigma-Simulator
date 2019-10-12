@@ -5,12 +5,17 @@ import pygame as pyg
 import random
 from pprint import pprint
 
+# Project module(s)
+from .gui_mod.line import Line
+from .gui_mod.circle_button import CircleButton
+from .gui_mod.connecting_wire import ConnectingWire as ConnW
+
 # Environment Variable(s)
 # Other
 from .env import ALPHABET, TRAIL_LIMIT
 
 # Colors
-from .env import BLACK, BACKGROUND_COLOR
+from .env import BLACK, BACKGROUND_COLOR, GOLD, RED, GREEN
 
 
 class Rotor:
@@ -41,8 +46,12 @@ class Rotor:
     def generate_rotor_board(self):
         """Generates confirigation for reflection/rotor/plugboard board"""
         rotor = dict()
-        self.pos = random.randint(0, self.alpha_len)
+        self.pos = random.randint(0, self.alpha_len - 1)
         ALPHABET_copy = self.alphabet.copy()
+        if (self.alpha_len % 2) != 0:
+            char = self.alphabet[0]
+            rotor[char] = char
+            ALPHABET_copy.remove(char)
         for character in self.alphabet:
             if character not in ALPHABET_copy:
                 continue
@@ -59,26 +68,172 @@ class Rotor:
             ALPHABET_copy.remove(rotor[character])
         return rotor
 
-    def animate(self, x, y, width, height, color=BLACK, background=BACKGROUND_COLOR):
+    # ---------------------------------------------------------------------------
+    # --------------------- COMMENT REST OF FOLLOWING CODE, ---------------------
+    # ----------------------------- IF NOT USING GUI ----------------------------
+    # ---------------------------------------------------------------------------
+    def animate(self, text, pos, dim, color=BLACK, bground=BACKGROUND_COLOR):
         """"""
-        self.top = y
-        self.left = x
-        self.width = width
-        self.height = height
+        self.top = pos[1]
+        self.left = pos[0]
+        self.width = dim[0]
+        self.height = dim[1]
         self.color = color
-        self.background = background
-        self.rotor_img = pyg.Surface((width, height))
+        self.bground = bground
+        self.rotor_img = pyg.Surface(dim)
+        self.text = text
+        self.label = pyg.font.SysFont("Comic Sans MS", 25).render(text, 1, BLACK)
+        self.symbols = list()
+
+        RADIUS = int(self.height * 0.03)
+        LEFT_MARGIN = int(self.width * 0.05)
+        RIGHT_MARGIN = int(self.width * 0.72)
+        TOP_MARGIN = int(self.height * 0.1)
+        SEPRATION = int(self.height * 0.25)
+        for i in range(self.alpha_len):
+            self.symbols.append(
+                CircleButton(
+                    text=self.alphabet[i],
+                    left=LEFT_MARGIN,
+                    top=TOP_MARGIN + i * SEPRATION,
+                    radius=RADIUS,
+                )
+            )
+            self.symbols.append(
+                CircleButton(
+                    text=self.k_dict[self.alphabet[i]],
+                    left=RIGHT_MARGIN,
+                    top=TOP_MARGIN + i * SEPRATION,
+                    radius=RADIUS,
+                )
+            )
+            self.symbols.append(
+                Line(
+                    pos=(
+                        1 + LEFT_MARGIN + 2 * RADIUS,
+                        TOP_MARGIN + RADIUS + i * SEPRATION,
+                    ),
+                    length=RIGHT_MARGIN - LEFT_MARGIN - 2 * RADIUS - 2,
+                )
+            )
         self.update_img()
 
-    def update_img(self):
+    def animate_reflection(self, text, pos, dim, color=BLACK, bground=BACKGROUND_COLOR):
         """"""
-        pyg.draw.rect(
-            self.rotor_img, self.background, (0, 0, self.width, self.height), 0
-        )
+        self.pos = None
+        self.top = pos[1]
+        self.left = pos[0]
+        self.width = dim[0]
+        self.height = dim[1]
+        self.color = color
+        self.bground = bground
+        self.rotor_img = pyg.Surface(dim)
+        self.text = text
+        self.label = pyg.font.SysFont("Comic Sans MS", 25).render(text, 1, BLACK)
+        self.symbols = list()
+
+        RADIUS = int(self.height * 0.03)
+        LEFT_MARGIN = int(self.width * 0.05)
+        TOP_MARGIN = int(self.height * 0.05)
+        SEPRATION = int(self.height * 0.12)
+        LENGTH = int((self.width - LEFT_MARGIN - 2 * RADIUS) * 0.2)
+        L_LEFT = LEFT_MARGIN + 2 * RADIUS
+        L_TOP = TOP_MARGIN + RADIUS
+
+        for i in range(self.alpha_len):
+            # INPUT
+            self.symbols.append(
+                CircleButton(
+                    text=self.alphabet[i],
+                    left=LEFT_MARGIN,
+                    top=TOP_MARGIN + i * SEPRATION,
+                    radius=RADIUS,
+                )
+            )
+            # OUTPUT
+            self.symbols.append(
+                CircleButton(
+                    text=self.k_dict[self.alphabet[i]],
+                    left=LEFT_MARGIN,
+                    top=TOP_MARGIN + (i + self.alpha_len) * SEPRATION,
+                    radius=RADIUS,
+                )
+            )
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            self.symbols.append(
+                ConnW(
+                    [
+                        Line(
+                            pos=(L_LEFT, L_TOP + i * SEPRATION),
+                            length=LENGTH * (self.alpha_len - i),
+                        ),
+                        Line(
+                            pos=(
+                                (L_LEFT + LENGTH * (self.alpha_len - i)),
+                                L_TOP + i * SEPRATION,
+                            ),
+                            length=int(SEPRATION * (2 * self.alpha_len - 2 * i - 1))
+                            + 1,
+                            rotate=90,
+                        ),
+                        Line(
+                            pos=(
+                                L_LEFT,
+                                L_TOP + (2 * self.alpha_len - i - 1) * SEPRATION,
+                            ),
+                            length=LENGTH * (self.alpha_len - i) + 4,
+                        ),
+                    ]
+                )
+            )
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+            # --------------------------------------------------------------------
+        self.update_img()
+
+    def update_img(self, active=None, active2=None):
+        """"""
+        pyg.draw.rect(self.rotor_img, self.bground, (0, 0, self.width, self.height), 0)
         pyg.draw.rect(
             self.rotor_img, self.color, (0, 0, self.width - 2, self.height - 2), 2
         )
+        self.rotor_img.blit(
+            self.label,
+            (
+                int((self.width - self.label.get_size()[0]) / 2),
+                int((self.height - self.label.get_size()[1]) / 2),
+            ),
+        )
+
+        if self.pos is not None:
+            self.pos_label = pyg.font.SysFont("Comic Sans MS", 25).render(
+                str(self.pos + 1), 1, BLACK
+            )
+            self.rotor_img.blit(
+                self.pos_label,
+                (
+                    int((self.width - self.label.get_size()[0]) * 0.85),
+                    int((self.height - self.label.get_size()[1]) * 0.25),
+                ),
+            )
+
+        for symbol in self.symbols:
+            symbol.__update__()
+        if active is not None:
+            # print("Updating rotor",  self.text, "with", active, "and", active2)
+            index1 = 3 * (ord(active) - ord(self.alphabet[0]) + 1) - 1
+            color = GREEN if self.text != "Reflection Board" else GOLD
+            self.symbols[index1].__update__(color)
+            if active2 is not None:
+                index2 = 3 * (ord(active2) - ord(self.alphabet[0]) + 1) - 1
+                self.symbols[index2].__update__(RED)
 
     def draw(self, surface):
         """"""
         surface.blit(self.rotor_img, (self.left, self.top))
+        for symbol in self.symbols:
+            symbol.draw(self.rotor_img)

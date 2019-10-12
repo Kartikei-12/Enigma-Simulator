@@ -1,15 +1,14 @@
 """Environment variable(s)"""
 
-# WIN_HEIGHT = 1525
-# WIN_WIDTH = 750
-STANDARD_WAIT = 5000
 BACKGROUND_COLOR = (225, 225, 225)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARK_GREY = (50, 50, 50)
 LIGHT_GREY = (150, 150, 150)
-ANIM_ALPHABET = ["A", "B", "C", "D"]
+TITLE_BAR_COLOR = (47, 43, 44)
+GOLD = (255, 165, 0)
+GREEN = (0, 255, 0)
 
 
 DEFAULT_FILE_NAME = ".enigma/enigma_config.json"

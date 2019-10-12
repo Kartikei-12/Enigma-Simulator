@@ -9,20 +9,18 @@ class RectangularButton:
     def __init__(
         self,
         text="",
-        left=10,
-        top=30,
-        width=None,
-        height=20,
+        pos=(10, 30),
+        dim=(None, 20),
         background=(255, 0, 0),
         border=(255, 0, 0),
         hover=(255, 0, 0),
     ):
         self.text = text
-        self.left = left
-        self.top = top
-        self.height = height
+        self.left = pos[0]
+        self.top = pos[1]
+        self.height = dim[0]
+        self.width = dim[1]
         self.colour1 = background
-        self.colour2 = border
         self.colour3 = hover
         self.colour4 = (225, 243, 252)
         self.fontname = "Arial"
@@ -33,12 +31,7 @@ class RectangularButton:
         self.clicked = False
         self.font = pyg.font.SysFont(self.fontname, self.fontsize)
         self.text_width, self.text_height = pyg.font.Font.size(self.font, self.text)
-        if width == None:
-            self.width = self.text_width + 20
-            self.width_type = "text"
-        else:
-            self.width = width
-            self.width_type = "user"
+        self.width_type = "user"
         self.buttonUP = pyg.Surface((self.width, self.height))
         self.buttonDOWN = pyg.Surface((self.width, self.height))
         self.buttonHOVER = pyg.Surface((self.width, self.height))
@@ -50,22 +43,6 @@ class RectangularButton:
         pyg.draw.rect(
             self.buttonUP, self.colour1, (0, 0, self.width, self.height / 2), 0
         )
-        pyg.draw.line(self.buttonUP, self.colour2, (2, 0), (self.width - 3, 0), 1)
-        pyg.draw.line(
-            self.buttonUP,
-            self.colour2,
-            (2, self.height - 1),
-            (self.width - 3, self.height - 1),
-            1,
-        )
-        pyg.draw.line(self.buttonUP, self.colour2, (0, 2), (0, self.height - 3), 1)
-        pyg.draw.line(
-            self.buttonUP,
-            self.colour2,
-            (self.width - 1, 2),
-            (self.width - 1, self.height - 3),
-            1,
-        )
         self.buttonUP.blit(
             self.font.render(self.text, False, (0, 0, 0)),
             (
@@ -73,34 +50,11 @@ class RectangularButton:
                 (self.height / 2) - (self.text_height / 2),
             ),
         )
+
         # hover
         self.buttonHOVER.fill(self.colour3)
         pyg.draw.rect(
             self.buttonHOVER, self.colour4, (0, 0, self.width, self.height / 2), 0
-        )
-        pyg.draw.line(self.buttonHOVER, self.colour2, (2, 0), (self.width - 3, 0), 1)
-        pyg.draw.line(
-            self.buttonHOVER,
-            self.colour2,
-            (2, self.height - 1),
-            (self.width - 3, self.height - 1),
-            1,
-        )
-        pyg.draw.line(
-            self.buttonHOVER,
-            self.colour4,
-            (2, self.height - 2),
-            (self.width - 3, self.height - 2),
-            1,
-        )
-        pyg.draw.line(self.buttonHOVER, self.colour2, (0, 2), (0, self.height - 3), 1)
-        pyg.draw.line(self.buttonHOVER, self.colour4, (1, 2), (1, self.height - 3), 2)
-        pyg.draw.line(
-            self.buttonHOVER,
-            self.colour2,
-            (self.width - 1, 2),
-            (self.width - 1, self.height - 3),
-            1,
         )
         self.buttonHOVER.blit(
             self.font.render(self.text, False, (0, 0, 0)),
@@ -109,28 +63,11 @@ class RectangularButton:
                 (self.height / 2) - (self.text_height / 2),
             ),
         )
+
         # down
         self.buttonDOWN.fill(self.colour3)
         pyg.draw.rect(
             self.buttonDOWN, self.colour4, (0, 0, self.width, self.height / 2), 0
-        )
-        pyg.draw.line(self.buttonDOWN, self.colour2, (2, 0), (self.width - 3, 0), 1)
-        pyg.draw.line(self.buttonDOWN, self.colour3, (2, 1), (self.width - 3, 1), 2)
-        pyg.draw.line(
-            self.buttonDOWN,
-            self.colour2,
-            (2, self.height - 1),
-            (self.width - 3, self.height - 1),
-            1,
-        )
-        pyg.draw.line(self.buttonDOWN, self.colour2, (0, 2), (0, self.height - 3), 1)
-        pyg.draw.line(self.buttonDOWN, self.colour2, (1, 2), (1, self.height - 3), 2)
-        pyg.draw.line(
-            self.buttonDOWN,
-            self.colour2,
-            (self.width - 1, 2),
-            (self.width - 1, self.height - 3),
-            1,
         )
         self.buttonDOWN.blit(
             self.font.render(self.text, False, (0, 0, 0)),

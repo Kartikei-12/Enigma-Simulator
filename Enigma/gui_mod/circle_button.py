@@ -2,6 +2,8 @@
 
 import pygame as pyg
 
+from ..env import BACKGROUND_COLOR
+
 
 class CircleButton:
     """"""
@@ -12,10 +14,10 @@ class CircleButton:
         left=10,
         top=30,
         radius=10,
-        background=(0, 0, 255),
-        border=(0, 255, 0),
-        hover=(255, 0, 0),
-        high_light=(100, 100, 100),
+        border=(0, 0, 0),
+        background=BACKGROUND_COLOR,
+        hover=BACKGROUND_COLOR,
+        high_light=BACKGROUND_COLOR,
     ):
         self.text = text
         self.left = left
@@ -50,19 +52,21 @@ class CircleButton:
             (self.radius - (self.text_width / 2), self.radius - (self.text_height / 2)),
         )
 
-    def __update__(self):
+    def __update__(self, background=None):
         """"""
-        self.draw_this_button(self.buttonUP, self.background)
+        background = self.background if background is None else self.high_light
+        self.draw_this_button(self.buttonUP, background)
         self.draw_this_button(self.buttonDOWN, self.high_light)
         self.draw_this_button(self.buttonHOVER, self.hover)
 
-    def draw(self, surface):
+    def draw(self, surface, static=False):
         """"""
-        self.__mouse_check__()
-        if self.mouse == "hover":
-            surface.blit(self.buttonHOVER, (self.left, self.top))
-        elif self.mouse == "off":
+        if not static:
+            self.__mouse_check__()
+        if self.mouse == "off":
             surface.blit(self.buttonUP, (self.left, self.top))
+        elif self.mouse == "hover":
+            surface.blit(self.buttonHOVER, (self.left, self.top))
         elif self.mouse == "down":
             surface.blit(self.buttonDOWN, (self.left, self.top))
 
@@ -89,7 +93,7 @@ class CircleButton:
         mouse_x, mouse_y = pyg.mouse.get_pos()
         if (
             ((mouse_x - self.left) ** 2 + (mouse_y - self.top) ** 2 - self.radius ** 2)
-            < 0
+            > 0
             and self.clicked
             and not _1
         ):

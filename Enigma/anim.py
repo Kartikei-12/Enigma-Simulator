@@ -1,113 +1,158 @@
 """"""
 
 # Python Module(s)
-import pygame
+import pygame as pyg
 
 # Project Module(s)
 from .enigma import Enigma
-from .rec_button import RectangularButton
-from .circle_button import CircleButton
+from .gui_mod.rec_button import RectangularButton
+from .gui_mod.circle_button import CircleButton
 
 # Environment Variable(s)
 # Other
-from .env import STANDARD_WAIT, ANIM_ALPHABET
+from .env import ALPHABET
 
 # Color(s)
 from .env import BACKGROUND_COLOR, RED, WHITE, BLACK, DARK_GREY, LIGHT_GREY
+from .env import TITLE_BAR_COLOR
 
-
-QUIT_EVENT = pygame.QUIT
-MOUSEBUTTONDOWN = pygame.MOUSEBUTTONDOWN
+QUIT_EVENT = pyg.QUIT
+MOUSEBUTTONDOWN = pyg.MOUSEBUTTONDOWN
 
 
 class Animation:
     """"""
 
     def __init__(self):
-        pygame.init()
-        pygame.display.set_caption("Enigma Simulator")
-        self.n_rotors = 2
-        self.en_obj = Enigma(alphabet=ANIM_ALPHABET, n_rotors=self.n_rotors)
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        pyg.init()
+        pyg.display.set_caption("Enigma Simulator")
+
+        # Common variable(s)
+        self.active = None
+        self.n_rotors = 3
+        self.en_obj = Enigma(alphabet=ALPHABET[0:4], n_rotors=self.n_rotors)
+        self.alphabet = self.en_obj.alphabet
+        self.screen = pyg.display.set_mode((0, 0), pyg.FULLSCREEN)
         self.width, self.height = self.screen.get_size()
+
+        # Title bar Image
+        try:
+            temp = pyg.image.load("Enigma/gui_mod/enigma_image.jpg")
+            self.title_image = pyg.transform.scale(temp, (30, 30))
+        except Exception as e:
+            self.title_image = None
+
+        # Quit Button (Famous X in RED background, at top right)
         self.quit_button = RectangularButton(
             text="X",
-            left=self.width * 0.885,
-            top=self.height * 0.1,
-            width=30,
-            height=30,
+            pos=(self.width * 0.885, self.height * 0.1),
+            dim=(30, 30),
             background=RED,
-            border=RED,
             hover=RED,
         )
 
+        # Title Bar
+        self.title_bar = pyg.Surface((self.width, 30))
+        pyg.draw.rect(self.title_bar, TITLE_BAR_COLOR, (0, 0, self.width, 30), 0)
+        if self.title_image is not None:
+            self.title_bar.blit(self.title_image, (0, 0))
+        self.title_bar.blit(
+            pyg.font.SysFont("Comic Sans MS", 20).render("Enigma Simulator", 1, WHITE),
+            (35, 0),
+        )
+
+        # Input Output Buttons
         RADIUS = int(self.height * 0.02)
         LEFT_MARGIN = int(self.width * 0.13)
-        TOP_MARGIN = int(self.height * 0.12)
-        SEPRATION = int(self.height * 0.1)
+        RIGHT_MARGIN = int(self.width * 0.85)
+        TOP_MARGIN = int(self.height * 0.175)
+        SEPRATION = int(self.height * 0.09)
+
+        i = 0
         self.in_buttons = list()
         self.out_buttons = list()
-        i = 0
-        for alpha in ANIM_ALPHABET:
+        for alpha in self.alphabet:
             self.in_buttons.append(
                 CircleButton(
                     text=alpha,
                     left=LEFT_MARGIN,
                     top=i * SEPRATION + TOP_MARGIN,
                     radius=RADIUS,
-                    background=BACKGROUND_COLOR,
-                    border=BLACK,
                     hover=DARK_GREY,
                     high_light=LIGHT_GREY,
                 )
             )
             i += 1
-        for alpha in ANIM_ALPHABET:
+        for alpha in self.alphabet:
             self.out_buttons.append(
                 CircleButton(
                     text=alpha,
                     left=LEFT_MARGIN,
                     top=i * SEPRATION + TOP_MARGIN,
                     radius=RADIUS,
-                    background=BACKGROUND_COLOR,
-                    border=BLACK,
                     hover=BACKGROUND_COLOR,
                     high_light=BACKGROUND_COLOR,
                 )
             )
             i += 1
 
-        WIDTH = int(self.width / (self.n_rotors + 3 + 1))
-        HEIGHT = int(self.height * 0.75)
-        LEFT_MARGIN = LEFT_MARGIN + 2 * RADIUS + 60
-        TOP_MARGIN = int(self.height * 0.12)
-        SEPRATION = int(self.width * 0.2)
+        WIDTH = int((self.width / (self.n_rotors + 3)) * 0.69)
+        HEIGHT = int(self.height * 0.7)
+        LEFT_MARGIN = LEFT_MARGIN + 2 * RADIUS + 100
+        TOP_MARGIN = int(self.height * 0.15)
+        SEPRATION = int(self.width * 0.14)
+
+        self.reflect = self.en_obj.reflect
+        self.plug = self.en_obj.plug
         self.rotors = list()
+
+        # Plug Board
+        self.plug.animate(
+            text="Plug Board",
+            pos=(LEFT_MARGIN, TOP_MARGIN),
+            dim=(WIDTH, HEIGHT),
+            bground=BACKGROUND_COLOR,
+        )
+        self.plug.pos = None
+        self.plug.update_img()
+
+        # Rotors
         for i in range(self.n_rotors):
             self.rotors.append(self.en_obj.rotors[i])
             self.rotors[-1].animate(
-                x=LEFT_MARGIN + i * SEPRATION,
-                y=TOP_MARGIN,
-                width=WIDTH,
-                height=HEIGHT,
-                background=BACKGROUND_COLOR,
+                text="Rotor {}".format(i + 1),
+                pos=((LEFT_MARGIN + (i + 1) * SEPRATION), TOP_MARGIN),
+                dim=(WIDTH, HEIGHT),
+                bground=BACKGROUND_COLOR,
             )
-        # self.rotor_1 = self.en_obj.rotors[0]
-        # self.rotor_1.animate(x=500, y=200, width=100, height=200)
 
+        # Reflection Board
+        self.reflect.animate_reflection(
+            text="Reflection Board",
+            pos=((LEFT_MARGIN + (self.n_rotors + 1) * SEPRATION), TOP_MARGIN),
+            dim=(WIDTH, HEIGHT),
+            bground=BACKGROUND_COLOR,
+        )
         self.start()
 
     def wait(self, t):
         """"""
-        pygame.time.wait(t)
+        pyg.time.wait(t)
 
     def get_events(self):
         """"""
-        return pygame.event.get()
+        return pyg.event.get()
+
+    def rotate_rotor(self, rotor_no):
+        """Rotates rotor with given index"""
+        self.rotors[rotor_no].rotate()
+        if rotor_no != (self.n_rotors - 1) and self.rotors[rotor_no].pos == 0:
+            self.rotate_rotor(rotor_no + 1)
 
     def update_screen(self):
         """"""
         self.screen.fill(BACKGROUND_COLOR)
+        self.screen.blit(self.title_bar, (190, 108))
         self.quit_button.draw(self.screen)
 
         for button in self.in_buttons:
@@ -115,11 +160,11 @@ class Animation:
         for button in self.out_buttons:
             button.draw(self.screen)
 
-        # self.rotor_1.draw(self.screen)
+        self.plug.draw(self.screen)
         for rotor in self.rotors:
             rotor.draw(self.screen)
-
-        pygame.display.update()
+        self.reflect.draw(self.screen)
+        pyg.display.update()
 
     def start(self):
         """"""
@@ -128,7 +173,25 @@ class Animation:
             self.update_screen()
             if self.quit_button.click():
                 running = False
+            for i in range(len(self.alphabet)):
+                if self.in_buttons[i].click():
+                    o_char = self.alphabet[i]
+                    print("Button pressed: ", o_char)
+                    print("Roors position: ", [r.pos for r in self.rotors])
+                    p_char, char_arr = self.en_obj.process_char(self.alphabet[i])
+                    mid = len(char_arr) // 2
+                    self.plug.update_img(o_char, char_arr[-1])
+                    for i in range(self.n_rotors):
+                        self.rotors[i].update_img(
+                            char_arr[2 * i + 1],
+                            char_arr[len(self.alphabet) - 2 * (i + 2)],
+                        )
+                    self.reflect.update_img(char_arr[mid - 1])
+                    self.out_buttons[ord(p_char) - ord(self.alphabet[0])].__update__(
+                        True
+                    )
+
             for event in self.get_events():
                 if event.type == QUIT_EVENT:
                     running = False
-            self.wait(5)
+            self.wait(1)
