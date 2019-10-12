@@ -35,7 +35,8 @@ def gui():
 
 
 if __name__ == "__main__":
-    if sys.argv[0] == "--gui":
+    print(sys.argv)
+    if sys.argv[1] == "--gui":
         gui()
     else:
         cmd()
