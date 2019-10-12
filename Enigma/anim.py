@@ -14,7 +14,7 @@ from .env import ALPHABET
 
 # Color(s)
 from .env import BACKGROUND_COLOR, RED, WHITE, BLACK, DARK_GREY, LIGHT_GREY
-from .env import TITLE_BAR_COLOR
+from .env import TITLE_BAR_COLOR, GOLD
 
 QUIT_EVENT = pyg.QUIT
 MOUSEBUTTONDOWN = pyg.MOUSEBUTTONDOWN
@@ -169,12 +169,14 @@ class Animation:
     def start(self):
         """"""
         running = True
+        p_char = self.alphabet[0]
         while running:
             self.update_screen()
             if self.quit_button.click():
                 running = False
             for i in range(len(self.alphabet)):
                 if self.in_buttons[i].click():
+                    self.out_buttons[ord(p_char) - ord(self.alphabet[0])].__update__()
                     o_char = self.alphabet[i]
                     print("Button pressed: ", o_char)
                     print("Roors position: ", [r.pos for r in self.rotors])
@@ -188,7 +190,7 @@ class Animation:
                         )
                     self.reflect.update_img(char_arr[mid - 1])
                     self.out_buttons[ord(p_char) - ord(self.alphabet[0])].__update__(
-                        True
+                        GOLD
                     )
 
             for event in self.get_events():

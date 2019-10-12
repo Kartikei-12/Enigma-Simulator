@@ -1,12 +1,14 @@
-""""""
+"""circle_button.py file"""
 
+# Python module(s)
 import pygame as pyg
 
+# Environment variable(s)
 from ..env import BACKGROUND_COLOR
 
 
 class CircleButton:
-    """"""
+    """Class to manage circular buttons"""
 
     def __init__(
         self,
@@ -54,7 +56,7 @@ class CircleButton:
 
     def __update__(self, background=None):
         """"""
-        background = self.background if background is None else self.high_light
+        background = self.background if background is None else background
         self.draw_this_button(self.buttonUP, background)
         self.draw_this_button(self.buttonDOWN, self.high_light)
         self.draw_this_button(self.buttonHOVER, self.hover)
