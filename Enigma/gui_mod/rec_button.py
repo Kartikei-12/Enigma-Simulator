@@ -5,7 +5,16 @@ import pygame as pyg
 
 
 class RectangularButton:
-    """"""
+    """Class for Rectangular buttons
+
+    Args:
+        test (str): Text to display
+        pos (tuple): 2 Elements describing position of button in (left, top) format
+        dim (tuple): 2 Elements describing dimention of button in (width, height) format
+        background (tuple): RGB for background color
+        border (tuple): RGB for border color
+        hover (tuple): RGB for highlight color on hover
+        rotate (int): Number of degress to roate counter-clockwise"""
 
     def __init__(
         self,
@@ -42,7 +51,7 @@ class RectangularButton:
         self.__update__()
 
     def __update__(self):
-        """"""
+        """Updates button"""
         # Normal button
         self.buttonUP.fill(self.colour1)
         pyg.draw.rect(
@@ -89,7 +98,10 @@ class RectangularButton:
         self.buttonDOWN = pyg.transform.rotate(self.buttonDOWN, self.rotate)
 
     def draw(self, surface):
-        """"""
+        """Draws button on supplied surface
+
+        Args:
+            surface (pygame.Surface): Surface to draw on"""
         self.__mouse_check__()
         if self.mouse == "hover":
             surface.blit(self.buttonHOVER, (self.left, self.top))
@@ -99,7 +111,7 @@ class RectangularButton:
             surface.blit(self.buttonDOWN, (self.left, self.top))
 
     def __mouse_check__(self):
-        """"""
+        """Checks mouse action with respect to button"""
         _1, _2, _3 = pyg.mouse.get_pressed()
         mouse_x, mouse_y = pyg.mouse.get_pos()
         if not _1:
@@ -119,6 +131,10 @@ class RectangularButton:
             self.clicked = False
 
     def click(self):
+        """Button click status
+
+        Returns:
+            bool : Wheather button is pressed or not"""
         _1, _2, _3 = pyg.mouse.get_pressed()
         mouse_x, mouse_y = pyg.mouse.get_pos()
         if (

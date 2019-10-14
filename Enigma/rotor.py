@@ -113,16 +113,14 @@ class Rotor:
             self.symbols.append(
                 CircleButton(
                     text=self.alphabet[i],
-                    left=LEFT_MARGIN,
-                    top=TOP_MARGIN + i * SEPRATION,
+                    pos=(LEFT_MARGIN, TOP_MARGIN + i * SEPRATION),
                     radius=RADIUS,
                 )
             )
             self.symbols.append(
                 CircleButton(
                     text=self.k_dict[self.alphabet[i]],
-                    left=RIGHT_MARGIN,
-                    top=TOP_MARGIN + i * SEPRATION,
+                    pos=(RIGHT_MARGIN, TOP_MARGIN + i * SEPRATION),
                     radius=RADIUS,
                 )
             )
@@ -164,8 +162,7 @@ class Rotor:
             self.symbols.append(
                 CircleButton(
                     text=self.alphabet[i],
-                    left=LEFT_MARGIN,
-                    top=TOP_MARGIN + i * SEPRATION,
+                    pos=(LEFT_MARGIN, TOP_MARGIN + i * SEPRATION),
                     radius=RADIUS,
                 )
             )
@@ -173,8 +170,7 @@ class Rotor:
             self.symbols.append(
                 CircleButton(
                     text=self.k_dict[self.alphabet[i]],
-                    left=LEFT_MARGIN,
-                    top=TOP_MARGIN + (i + self.alpha_len) * SEPRATION,
+                    pos=(LEFT_MARGIN, TOP_MARGIN + (i + self.alpha_len) * SEPRATION),
                     radius=RADIUS,
                 )
             )

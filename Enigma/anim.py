@@ -1,4 +1,4 @@
-""""""
+"""anim.py file"""
 
 # Python Module(s)
 import pygame as pyg
@@ -75,8 +75,7 @@ class Animation:
             self.in_buttons.append(
                 CircleButton(
                     text=alpha,
-                    left=LEFT_MARGIN,
-                    top=i * SEPRATION + TOP_MARGIN,
+                    pos=(LEFT_MARGIN, i * SEPRATION + TOP_MARGIN),
                     radius=RADIUS,
                     hover=DARK_GREY,
                     high_light=LIGHT_GREY,
@@ -88,8 +87,7 @@ class Animation:
             self.out_buttons.append(
                 CircleButton(
                     text=alpha,
-                    left=LEFT_MARGIN,
-                    top=i * SEPRATION + TOP_MARGIN,
+                    pos=(LEFT_MARGIN, i * SEPRATION + TOP_MARGIN),
                     radius=RADIUS,
                     hover=BACKGROUND_COLOR,
                     high_light=BACKGROUND_COLOR,
