@@ -22,6 +22,6 @@ class EnigmaTest(unittest.TestCase):
         """Testing complete process"""
         plain = "HELLO WORLD THIS IS TEST METHOD FOR ENIGMA"
         cipher = self.en_obj.process(plain)
-        self.en_obj.reset_config_dict()
+        self.en_obj.reset_from_config_dict()
         plain_again = self.en_obj.process(cipher)
         self.assertEqual(plain, plain_again)

@@ -80,6 +80,7 @@ class Animation:
                     radius=RADIUS,
                     hover=DARK_GREY,
                     high_light=LIGHT_GREY,
+                    static=False,
                 )
             )
             i += 1
@@ -92,6 +93,7 @@ class Animation:
                     radius=RADIUS,
                     hover=BACKGROUND_COLOR,
                     high_light=BACKGROUND_COLOR,
+                    static=False,
                 )
             )
             i += 1
@@ -105,6 +107,8 @@ class Animation:
         self.reflect = self.en_obj.reflect
         self.plug = self.en_obj.plug
         self.rotors = list()
+        self.UpButtons = list()
+        self.DownButtons = list()
 
         # Plug Board
         self.plug.animate(
@@ -117,13 +121,40 @@ class Animation:
         self.plug.update_img()
 
         # Rotors
-        for i in range(self.n_rotors):
-            self.rotors.append(self.en_obj.rotors[i])
+        for i in range(1, self.n_rotors + 1):
+            self.rotors.append(self.en_obj.rotors[i - 1])
             self.rotors[-1].animate(
-                text="Rotor {}".format(i + 1),
-                pos=((LEFT_MARGIN + (i + 1) * SEPRATION), TOP_MARGIN),
+                text="Rotor {}".format(i),
+                pos=(LEFT_MARGIN + (i * SEPRATION), TOP_MARGIN),
                 dim=(WIDTH, HEIGHT),
                 bground=BACKGROUND_COLOR,
+            )
+            self.UpButtons.append(
+                RectangularButton(
+                    text="^",
+                    pos=(
+                        int((LEFT_MARGIN + i * SEPRATION) + 100),
+                        int(TOP_MARGIN * 1.8),
+                    ),
+                    dim=(30, 30),
+                    background=BACKGROUND_COLOR,
+                    border=BLACK,
+                    hover=DARK_GREY,
+                )
+            )
+            self.DownButtons.append(
+                RectangularButton(
+                    text="^",
+                    pos=(
+                        int((LEFT_MARGIN + i * SEPRATION) + 100),
+                        int(TOP_MARGIN * 2.5),
+                    ),
+                    dim=(30, 30),
+                    background=BACKGROUND_COLOR,
+                    border=BLACK,
+                    hover=DARK_GREY,
+                    rotate=180,
+                )
             )
 
         # Reflection Board
@@ -133,6 +164,7 @@ class Animation:
             dim=(WIDTH, HEIGHT),
             bground=BACKGROUND_COLOR,
         )
+
         self.start()
 
     def wait(self, t):
@@ -163,6 +195,10 @@ class Animation:
         self.plug.draw(self.screen)
         for rotor in self.rotors:
             rotor.draw(self.screen)
+        for button in self.UpButtons:
+            button.draw(self.screen)
+        for button in self.DownButtons:
+            button.draw(self.screen)
         self.reflect.draw(self.screen)
         pyg.display.update()
 
@@ -174,12 +210,18 @@ class Animation:
             self.update_screen()
             if self.quit_button.click():
                 running = False
+            for i in range(len(self.UpButtons)):
+                if self.UpButtons[i].click():
+                    self.rotors[i].rotate()
+                    self.rotors[i].update_img()
+            for i in range(len(self.DownButtons)):
+                if self.DownButtons[i].click():
+                    self.rotors[i].rotate(by=-1)
+                    self.rotors[i].update_img()
             for i in range(len(self.alphabet)):
                 if self.in_buttons[i].click():
                     self.out_buttons[ord(p_char) - ord(self.alphabet[0])].__update__()
                     o_char = self.alphabet[i]
-                    print("Button pressed: ", o_char)
-                    print("Roors position: ", [r.pos for r in self.rotors])
                     p_char, char_arr = self.en_obj.process_char(self.alphabet[i])
                     mid = len(char_arr) // 2
                     self.plug.update_img(o_char, char_arr[-1])

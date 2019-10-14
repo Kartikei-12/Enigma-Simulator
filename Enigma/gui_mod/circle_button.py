@@ -8,27 +8,36 @@ from ..env import BACKGROUND_COLOR
 
 
 class CircleButton:
-    """Class to manage circular buttons"""
+    """Class to manage circular buttons
+
+    Args:
+        test (str): Text to display
+        pos (tuple): 2 Elements describing position of button in (left, top) format
+        radius (int): Radius of the button
+        border (tuple): RGB color value for border color
+        hover (tuple): RGB color value for hover color
+        high_light (tuple): RGB color value for button press color"""
 
     def __init__(
         self,
-        text="",
-        left=10,
-        top=30,
+        text,
+        pos,
         radius=10,
         border=(0, 0, 0),
         background=BACKGROUND_COLOR,
         hover=BACKGROUND_COLOR,
         high_light=BACKGROUND_COLOR,
+        static=True,
     ):
         self.text = text
-        self.left = left
-        self.top = top
+        self.left = pos[0]
+        self.top = pos[1]
         self.radius = radius
         self.background = background
         self.border = border
         self.hover = hover
         self.high_light = high_light
+        self.static = static
         self.diameter = self.radius * 2
         self.fontname = "Arial"
         self.fontsize = int(self.radius * 1.5)
@@ -44,7 +53,11 @@ class CircleButton:
         self.__update__()
 
     def draw_this_button(self, button_surface, color):
-        """"""
+        """Draws button from supplied button_surface argument
+
+        Args:
+            button_surface(pygame.Surface): Surface to draw button on
+            color(tuple): RGB for normal color of the button"""
         center = (self.radius, self.radius)
         button_surface.fill(self.background)
         pyg.draw.circle(button_surface, self.border, center, self.radius, 2)
@@ -55,15 +68,21 @@ class CircleButton:
         )
 
     def __update__(self, background=None):
-        """"""
+        """Updates the button
+
+        Args:
+            background(tuple): RGB for normal background of the button"""
         background = self.background if background is None else background
         self.draw_this_button(self.buttonUP, background)
         self.draw_this_button(self.buttonDOWN, self.high_light)
         self.draw_this_button(self.buttonHOVER, self.hover)
 
-    def draw(self, surface, static=False):
-        """"""
-        if not static:
+    def draw(self, surface):
+        """Draws circular button of self object on supplied surface
+
+        Args:
+            surface(pygame.Surface): Surface to draw button on"""
+        if not self.static:
             self.__mouse_check__()
         if self.mouse == "off":
             surface.blit(self.buttonUP, (self.left, self.top))
@@ -73,7 +92,7 @@ class CircleButton:
             surface.blit(self.buttonDOWN, (self.left, self.top))
 
     def __mouse_check__(self):
-        """"""
+        """Check mouse action with respect to this button"""
         _1, _2, _3 = pyg.mouse.get_pressed()
         mouse_x, mouse_y = pyg.mouse.get_pos()
         left = self.left + self.radius
@@ -91,6 +110,10 @@ class CircleButton:
             self.clicked = False
 
     def click(self):
+        """Checks if button is pressed
+
+        Returns:
+            bool : True if button is pressed"""
         _1, _2, _3 = pyg.mouse.get_pressed()
         mouse_x, mouse_y = pyg.mouse.get_pos()
         if (

@@ -1,5 +1,6 @@
-""""""
+"""rec_button.py file"""
 
+# Python module(s)
 import pygame as pyg
 
 
@@ -14,15 +15,18 @@ class RectangularButton:
         background=(255, 0, 0),
         border=(255, 0, 0),
         hover=(255, 0, 0),
+        rotate=0,
     ):
         self.text = text
         self.left = pos[0]
         self.top = pos[1]
-        self.height = dim[0]
-        self.width = dim[1]
+        self.height = dim[1]
+        self.width = dim[0]
         self.colour1 = background
+        self.border = border
         self.colour3 = hover
         self.colour4 = (225, 243, 252)
+        self.rotate = rotate
         self.fontname = "Arial"
         self.fontsize = self.height - 6
         self.mouse_over = False
@@ -39,10 +43,12 @@ class RectangularButton:
 
     def __update__(self):
         """"""
+        # Normal button
         self.buttonUP.fill(self.colour1)
         pyg.draw.rect(
-            self.buttonUP, self.colour1, (0, 0, self.width, self.height / 2), 0
+            self.buttonUP, self.colour1, (0, 0, self.width - 2, self.height - 2), 0
         )
+        pyg.draw.rect(self.buttonUP, self.border, (0, 0, self.width, self.height), 2)
         self.buttonUP.blit(
             self.font.render(self.text, False, (0, 0, 0)),
             (
@@ -50,12 +56,14 @@ class RectangularButton:
                 (self.height / 2) - (self.text_height / 2),
             ),
         )
+        self.buttonUP = pyg.transform.rotate(self.buttonUP, self.rotate)
 
         # hover
         self.buttonHOVER.fill(self.colour3)
         pyg.draw.rect(
-            self.buttonHOVER, self.colour4, (0, 0, self.width, self.height / 2), 0
+            self.buttonHOVER, self.colour4, (0, 0, self.width - 2, self.height - 2), 0
         )
+        pyg.draw.rect(self.buttonHOVER, self.border, (0, 0, self.width, self.height), 2)
         self.buttonHOVER.blit(
             self.font.render(self.text, False, (0, 0, 0)),
             (
@@ -63,12 +71,14 @@ class RectangularButton:
                 (self.height / 2) - (self.text_height / 2),
             ),
         )
+        self.buttonHOVER = pyg.transform.rotate(self.buttonHOVER, self.rotate)
 
         # down
         self.buttonDOWN.fill(self.colour3)
         pyg.draw.rect(
-            self.buttonDOWN, self.colour4, (0, 0, self.width, self.height / 2), 0
+            self.buttonDOWN, self.colour4, (0, 0, self.width - 2, self.height - 2), 0
         )
+        pyg.draw.rect(self.buttonDOWN, self.border, (0, 0, self.width, self.height), 2)
         self.buttonDOWN.blit(
             self.font.render(self.text, False, (0, 0, 0)),
             (
@@ -76,6 +86,7 @@ class RectangularButton:
                 (self.height / 2) - (self.text_height / 2),
             ),
         )
+        self.buttonDOWN = pyg.transform.rotate(self.buttonDOWN, self.rotate)
 
     def draw(self, surface):
         """"""

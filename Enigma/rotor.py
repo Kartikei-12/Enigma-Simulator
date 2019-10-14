@@ -21,12 +21,16 @@ from .env import BLACK, BACKGROUND_COLOR, GOLD, RED, GREEN
 class Rotor:
     """"""
 
-    def __init__(self, k_dict=None, alphabet=ALPHABET, pos=0):
+    def __init__(self, k_dict=None, alphabet=ALPHABET, pos=0, reflection=True):
         self.alpha_len = len(alphabet)
         self.alphabet = alphabet
         self.pos = pos
         if k_dict == None:
-            self.k_dict = self.generate_rotor_board()
+            self.k_dict = (
+                self.generate_rotor_board()
+                if reflection
+                else self.generate_rotor_board_non_reflection()
+            )
         else:
             self.k_dict = k_dict
 
@@ -39,14 +43,13 @@ class Rotor:
         """Fetches rotor value"""
         return self.k_dict[char]
 
-    def rotate(self):
+    def rotate(self, by=1):
         """Rotates rotor with given index"""
-        self.pos = (self.pos + 1) % self.alpha_len
+        self.pos = (self.pos + by) % self.alpha_len
 
     def generate_rotor_board(self):
-        """Generates confirigation for reflection/rotor/plugboard board"""
+        """Generates confirigation for reflection/plugboard board"""
         rotor = dict()
-        self.pos = random.randint(0, self.alpha_len - 1)
         ALPHABET_copy = self.alphabet.copy()
         if (self.alpha_len % 2) != 0:
             char = self.alphabet[0]
@@ -68,10 +71,26 @@ class Rotor:
             ALPHABET_copy.remove(rotor[character])
         return rotor
 
-    # ---------------------------------------------------------------------------
-    # --------------------- COMMENT REST OF FOLLOWING CODE, ---------------------
-    # ----------------------------- IF NOT USING GUI ----------------------------
-    # ---------------------------------------------------------------------------
+    def generate_rotor_board_non_reflection(self):
+        """Generates confirigation for rotor board"""
+        rotor = dict()
+        self.pos = random.randint(0, self.alpha_len - 1)
+        ALPHABET_copy = self.alphabet.copy()
+        for character in self.alphabet:
+            count = 0
+            rotor[character] = random.choice(ALPHABET_copy)
+            while character == rotor[character]:
+                rotor[character] = random.choice(ALPHABET_copy)
+                count += 1
+                if count == TRAIL_LIMIT:
+                    raise Exception("Error in random sampaling")
+            ALPHABET_copy.remove(rotor[character])
+        return rotor
+
+    # ---------------------------------------------------------------------------------
+    # ----------------------- COMMENT REST OF FOLLOWING CODE, -------------------------
+    # ------------------------------- IF NOT USING GUI --------------------------------
+    # ---------------------------------------------------------------------------------
     def animate(self, text, pos, dim, color=BLACK, bground=BACKGROUND_COLOR):
         """"""
         self.top = pos[1]
@@ -161,8 +180,6 @@ class Rotor:
             )
             # --------------------------------------------------------------------
             # --------------------------------------------------------------------
-            # --------------------------------------------------------------------
-            # --------------------------------------------------------------------
             self.symbols.append(
                 ConnW(
                     [
@@ -211,7 +228,7 @@ class Rotor:
 
         if self.pos is not None:
             self.pos_label = pyg.font.SysFont("Comic Sans MS", 25).render(
-                str(self.pos + 1), 1, BLACK
+                self.alphabet[self.pos], 1, BLACK
             )
             self.rotor_img.blit(
                 self.pos_label,
@@ -224,16 +241,15 @@ class Rotor:
         for symbol in self.symbols:
             symbol.__update__()
         if active is not None:
-            # print("Updating rotor",  self.text, "with", active, "and", active2)
             index1 = 3 * (ord(active) - ord(self.alphabet[0]) + 1) - 1
             color = GREEN if self.text != "Reflection Board" else GOLD
             self.symbols[index1].__update__(color)
             if active2 is not None:
                 index2 = 3 * (ord(active2) - ord(self.alphabet[0]) + 1) - 1
                 self.symbols[index2].__update__(RED)
+        for symbol in self.symbols:
+            symbol.draw(self.rotor_img)
 
     def draw(self, surface):
         """"""
         surface.blit(self.rotor_img, (self.left, self.top))
-        for symbol in self.symbols:
-            symbol.draw(self.rotor_img)
