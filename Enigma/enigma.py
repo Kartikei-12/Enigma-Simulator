@@ -21,7 +21,10 @@ class Enigma:
 
     Args:
         configration_file(str): Name of confirigation file for enigma machine,
-        pass 'None' or nothing if to generate new confirigation file"""
+            pass 'None' or nothing if to generate new confirigation file
+        alphabet(list, tuple): Iterable object containning set of alphabet for Enigma to work on
+        save_config(bool): Wheather to save confirigation in case a new one is generated
+        n_rotors(int): Number of rotors in the Enigma Machine"""
 
     def __init__(
         self,
@@ -47,15 +50,24 @@ class Enigma:
             self.config_dict = self.load_config()
 
     def get_congig_file_name(self):
-        """Returns config file name"""
+        """Returns config file name
+
+        Returns:
+            str : Name of confirigation file"""
         return self.config_file_name
 
     def set_config_file_name(self, name):
-        """Sets new config file name"""
+        """Sets new config file name
+
+        Args:
+            name(str): Name of confirigation file"""
         self.config_file_name = name
 
     def load_config(self):
-        """Loads confirigation file"""
+        """Loads confirigation file
+
+        Returns:
+            dict : New confirigation dictionary"""
         with open(self.config_file_name, "r") as f:
             config_dict = json.loads(f.read())
         self.rotors = list()

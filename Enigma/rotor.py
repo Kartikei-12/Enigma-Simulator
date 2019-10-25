@@ -1,7 +1,6 @@
-""""""
+"""rotor.py file, Contains Rotor class for Enigma Simulator"""
 
 # Python module(s)
-import pygame as pyg
 import random
 from pprint import pprint
 
@@ -10,7 +9,7 @@ from .gui_mod.line import Line
 from .gui_mod.circle_button import CircleButton
 from .gui_mod.connecting_wire import ConnectingWire as ConnW
 
-# Environment Variable(s)
+## Environment Variable(s)
 # Other
 from .env import ALPHABET, TRAIL_LIMIT
 
@@ -93,6 +92,8 @@ class Rotor:
     # ---------------------------------------------------------------------------------
     def animate(self, text, pos, dim, color=BLACK, bground=BACKGROUND_COLOR):
         """"""
+        import pygame as pyg
+
         self.top = pos[1]
         self.left = pos[0]
         self.width = dim[0]
@@ -137,6 +138,8 @@ class Rotor:
 
     def animate_reflection(self, text, pos, dim, color=BLACK, bground=BACKGROUND_COLOR):
         """"""
+        import pygame as pyg
+
         self.pos = None
         self.top = pos[1]
         self.left = pos[0]
