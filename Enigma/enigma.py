@@ -24,7 +24,10 @@ class Enigma:
             pass 'None' or nothing if to generate new confirigation file
         alphabet(list, tuple): Iterable object containning set of alphabet for Enigma to work on
         save_config(bool): Wheather to save confirigation in case a new one is generated
-        n_rotors(int): Number of rotors in the Enigma Machine"""
+        n_rotors(int): Number of rotors in the Enigma Machine
+
+    Notes:
+        * First rotor is at index 0 and so on """
 
     def __init__(
         self,
@@ -38,14 +41,11 @@ class Enigma:
         self.n_rotors = n_rotors
         self.rotors = list()
         if configration_file == None:
-            print("Generating new confirigation")
             self.config_file_name = DEFAULT_FILE_NAME
             self.config_dict = self.generate_confirigation_dict()
             if save_config:
                 self.save_config()
-                print("Saved new confirigation")
         else:
-            print("Loading confirigation file")
             self.config_file_name = configration_file
             self.config_dict = self.load_config()
 
@@ -93,7 +93,7 @@ class Enigma:
             f.write(json.dumps(self.config_dict))
 
     def update_config_dict(self):
-        """Updates confirigation dictionary"""
+        """Updates confirigation dictionary for rotor position"""
         for i in range(self.n_rotors):
             self.config_dict["positions"][i] = self.rotors[i].pos
 
@@ -103,53 +103,94 @@ class Enigma:
             self.rotors[i].pos = self.config_dict["positions"][i]
 
     def get_plug_value(self, char):
-        """Fetches plug board value"""
+        """Fetches plug board value
+
+        Args:
+            char (str):  Single chracter to feed into plug board
+
+        Returns:
+            str : Output of plug board"""
         return self.plug[char]
 
     def get_reflection_value(self, char):
-        """Fetches reflection board value"""
+        """Fetches reflection board value
+
+        Args:
+            char (str):  Single chracter to feed into reflection board
+
+        Returns:
+            str : Output of reflection board"""
         return self.reflect[char]
 
     def rotate_rotor(self, rotor_no):
-        """Rotates rotor with given index"""
+        """Rotates rotor with given index
+
+        Args:
+            rotor_no (int): Index of rotor to rotate"""
         self.rotors[rotor_no].rotate()
         if rotor_no != (self.n_rotors - 1) and self.rotors[rotor_no].pos == 0:
             self.rotate_rotor(rotor_no + 1)
 
     def process_char(self, char):
-        """"""
+        """Passes a single chracter through the enigma machine
+
+        Args:
+            char (str): Chracter to pass through enigma
+
+        Returns:
+            tuple (str, list[str]): Final chracter, chracter generated at various stages"""
         out_arr = list()
+
+        # Plug Board
         char = self.get_plug_value(char)
         out_arr.append(char)
+
+        # Rotors In
         for i in range(self.n_rotors):
             char = self.rotors[i].move(char)
             out_arr.append(char)
             char = self.rotors[i][char]
             out_arr.append(char)
+
+        # Refelection Board
         char = self.get_reflection_value(char)
         out_arr.append(char)
+
+        # Rotors Out
         for i in range(self.n_rotors - 1, -1, -1):
             char = self.rotors[i][char]
             out_arr.append(char)
-            char = self.rotors[i].move(char, by=-1)
+            char = self.rotors[i].move(char, -1)
             out_arr.append(char)
 
+        # Reverse Plug Board
         char = self.get_plug_value(char)
+
+        # Rotate rotors
         self.rotate_rotor(0)
+
         return (char, out_arr)
 
     def process(self, org_string):
-        """Main processing method"""
+        """Main processing method
+
+        Args:
+            org_string (str): String to pass through enigma
+
+        Returns:
+            str : Processed string"""
         processed_str = ""
         for char in org_string:
-            if char in self.alphabet:
-                processed_str += self.process_char(char)[0]
-            else:
-                processed_str += char
+            processed_str += (
+                self.process_char(char)[0] if char in self.alphabet else char
+            )
         return processed_str
 
     def generate_confirigation_dict(self):
-        """Generates configrigation dictionary"""
+        """Generates configrigation dictionary
+
+        Returns:
+            dict : A new Confirigation dictionary"""
         self.rotors = list()
         self.reflect = Rotor(alphabet=self.alphabet)
         self.plug = Rotor(alphabet=self.alphabet)

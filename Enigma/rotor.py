@@ -2,6 +2,7 @@
 
 # Python module(s)
 import random
+import pygame as pyg
 from pprint import pprint
 
 # Project module(s)
@@ -18,7 +19,13 @@ from .env import BLACK, BACKGROUND_COLOR, GOLD, RED, GREEN
 
 
 class Rotor:
-    """"""
+    """Rotor class for Enigma Simulator
+
+    Args:
+        k_dict (dict): Key Dictionary for the rotor
+        alphabet (list, tuple): Alphabet set
+        pos (int): Initial position of the rotor
+        refelection (bool): Wheather for reflection board or not"""
 
     def __init__(self, k_dict=None, alphabet=ALPHABET, pos=0, reflection=True):
         self.alpha_len = len(alphabet)
@@ -33,14 +40,31 @@ class Rotor:
         else:
             self.k_dict = k_dict
 
-    def move(self, char, by=1):
-        """Moves chracter forward"""
-        pos = self.pos * by
+    def move(self, char, factor=1):
+        """Moves chracter forward
+
+        Args:
+            char (str[0]): Chracter to move effect for different rotor position
+            factor (int): Factor to mave chracter with
+
+        Returns:
+            str[0] : Moved chracter"""
+        pos = self.pos * factor
         return chr(((ord(char) - ord("A") + pos) % self.alpha_len) + ord("A"))
 
     def __getitem__(self, char):
-        """Fetches rotor value"""
-        return self.k_dict[char]
+        """Fetches rotor value
+
+        Args:
+            char (str): Chracter to pass through rotor interior
+
+        Returns:
+            str: Passed chracter"""
+        return (
+            list([self.k_dict[ch] for ch in char])
+            if len(char) != 1
+            else self.k_dict[char]
+        )
 
     def rotate(self, by=1):
         """Rotates rotor with given index"""
@@ -50,7 +74,7 @@ class Rotor:
         """Generates confirigation for reflection/plugboard board"""
         rotor = dict()
         ALPHABET_copy = self.alphabet.copy()
-        if (self.alpha_len % 2) != 0:
+        if (len(self.alphabet) % 2) != 0:
             char = self.alphabet[0]
             rotor[char] = char
             ALPHABET_copy.remove(char)

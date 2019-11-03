@@ -42,6 +42,7 @@ def cmd():
 def gui():
     """Graphical User Interface"""
     an = Animation()
+    an.start()
 
 
 if __name__ == "__main__":

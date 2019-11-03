@@ -1,4 +1,4 @@
-"""anim.py file"""
+"""anim.py file Manages animation of Enigma Simulator"""
 
 # Python Module(s)
 import pygame as pyg
@@ -21,7 +21,7 @@ MOUSEBUTTONDOWN = pyg.MOUSEBUTTONDOWN
 
 
 class Animation:
-    """"""
+    """Animation class for Enigma Simulator project"""
 
     def __init__(self):
         pyg.init()
@@ -163,24 +163,31 @@ class Animation:
             bground=BACKGROUND_COLOR,
         )
 
-        self.start()
-
     def wait(self, t):
-        """"""
+        """Default wait method
+
+        Args:
+            t (int): Time in milli seconds to wait"""
         pyg.time.wait(t)
 
     def get_events(self):
-        """"""
+        """Provides iterable object for list of pygame events
+
+        Returns:
+            pygame.event : Pygame events list"""
         return pyg.event.get()
 
     def rotate_rotor(self, rotor_no):
-        """Rotates rotor with given index"""
+        """Rotates rotor with given index
+
+        Args:
+            rotor_no (int): Index of rotor to rotate"""
         self.rotors[rotor_no].rotate()
         if rotor_no != (self.n_rotors - 1) and self.rotors[rotor_no].pos == 0:
             self.rotate_rotor(rotor_no + 1)
 
     def update_screen(self):
-        """"""
+        """Update screen method for main screen"""
         self.screen.fill(BACKGROUND_COLOR)
         self.screen.blit(self.title_bar, (190, 108))
         self.quit_button.draw(self.screen)
@@ -200,22 +207,30 @@ class Animation:
         self.reflect.draw(self.screen)
         pyg.display.update()
 
-    def start(self):
-        """"""
+    def start(self, testing=False):
+        """Main start method for Animation"""
         running = True
         p_char = self.alphabet[0]
         while running:
             self.update_screen()
+
+            # Quit Button
             if self.quit_button.click():
                 running = False
+
+            # Up Button Clicks
             for i in range(len(self.UpButtons)):
                 if self.UpButtons[i].click():
                     self.rotors[i].rotate()
                     self.rotors[i].update_img()
+
+            # Down Button Clicks
             for i in range(len(self.DownButtons)):
                 if self.DownButtons[i].click():
                     self.rotors[i].rotate(by=-1)
                     self.rotors[i].update_img()
+
+            # Input Button Click
             for i in range(len(self.alphabet)):
                 if self.in_buttons[i].click():
                     self.out_buttons[ord(p_char) - ord(self.alphabet[0])].__update__()
@@ -237,3 +252,7 @@ class Animation:
                 if event.type == QUIT_EVENT:
                     running = False
             self.wait(1)
+
+            if testing:
+                self.wait(2000)
+                break
