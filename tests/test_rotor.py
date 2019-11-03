@@ -66,4 +66,4 @@ class RotorTest(unittest.TestCase):
         """Testing generate_rotor_board"""
         rotor_dict = self.rotor.generate_rotor_board_non_reflection()
         self.assertIsInstance(rotor_dict, dict)
-        self.assertNotEqual("A", rotor_dict[rotor_dict["A"]])
+        self.assertNotEqual("A", rotor_dict["A"])
