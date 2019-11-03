@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Enigma package &#8212; Enigma Simulator  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="enigma-package">
+<h1>Enigma package<a class="headerlink" href="#enigma-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-Enigma.anim">
+<span id="enigma-anim-module"></span><h2>Enigma.anim module<a class="headerlink" href="#module-Enigma.anim" title="Permalink to this headline">¶</a></h2>
+<p>anim.py file Manages animation of Enigma Simulator</p>
+<dl class="class">
+<dt id="Enigma.anim.Animation">
+<em class="property">class </em><code class="sig-prename descclassname">Enigma.anim.</code><code class="sig-name descname">Animation</code><a class="headerlink" href="#Enigma.anim.Animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Animation class for Enigma Simulator project</p>
+<dl class="method">
+<dt id="Enigma.anim.Animation.get_events">
+<code class="sig-name descname">get_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.anim.Animation.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides iterable object for list of pygame events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Pygame events list</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pygame.event</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.anim.Animation.rotate_rotor">
+<code class="sig-name descname">rotate_rotor</code><span class="sig-paren">(</span><em class="sig-param">rotor_no</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.anim.Animation.rotate_rotor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates rotor with given index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotor_no</strong> (<em>int</em>) – Index of rotor to rotate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.anim.Animation.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><em class="sig-param">testing=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.anim.Animation.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main start method for Animation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.anim.Animation.update_screen">
+<code class="sig-name descname">update_screen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.anim.Animation.update_screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update screen method for main screen</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.anim.Animation.wait">
+<code class="sig-name descname">wait</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.anim.Animation.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default wait method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>int</em>) – Time in milli seconds to wait</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Enigma.enigma">
+<span id="enigma-enigma-module"></span><h2>Enigma.enigma module<a class="headerlink" href="#module-Enigma.enigma" title="Permalink to this headline">¶</a></h2>
+<p>enigma.py file</p>
+<p>Contains main Enigma class for the project</p>
+<p>Author: Kartikei Mittal</p>
+<dl class="class">
+<dt id="Enigma.enigma.Enigma">
+<em class="property">class </em><code class="sig-prename descclassname">Enigma.enigma.</code><code class="sig-name descname">Enigma</code><span class="sig-paren">(</span><em class="sig-param">configration_file=None, alphabet=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'], save_config=False, n_rotors=3</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Enigma class for Enigma simulator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configration_file</strong> (<em>str</em>) – Name of confirigation file for enigma machine,
+pass ‘None’ or nothing if to generate new confirigation file</p></li>
+<li><p><strong>alphabet</strong> (<em>list</em><em>, </em><em>tuple</em>) – Iterable object containning set of alphabet for Enigma to work on</p></li>
+<li><p><strong>save_config</strong> (<em>bool</em>) – Wheather to save confirigation in case a new one is generated</p></li>
+<li><p><strong>n_rotors</strong> (<em>int</em>) – Number of rotors in the Enigma Machine</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>First rotor is at index 0 and so on</p></li>
+</ul>
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.generate_confirigation_dict">
+<code class="sig-name descname">generate_confirigation_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.generate_confirigation_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates configrigation dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A new Confirigation dictionary</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.get_congig_file_name">
+<code class="sig-name descname">get_congig_file_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.get_congig_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns config file name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Name of confirigation file</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.get_plug_value">
+<code class="sig-name descname">get_plug_value</code><span class="sig-paren">(</span><em class="sig-param">char</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.get_plug_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches plug board value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>str</em>) – Single chracter to feed into plug board</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Output of plug board</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.get_reflection_value">
+<code class="sig-name descname">get_reflection_value</code><span class="sig-paren">(</span><em class="sig-param">char</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.get_reflection_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches reflection board value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>str</em>) – Single chracter to feed into reflection board</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Output of reflection board</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.load_config">
+<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads confirigation file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>New confirigation dictionary</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.process">
+<code class="sig-name descname">process</code><span class="sig-paren">(</span><em class="sig-param">org_string</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main processing method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_string</strong> (<em>str</em>) – String to pass through enigma</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Processed string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.process_char">
+<code class="sig-name descname">process_char</code><span class="sig-paren">(</span><em class="sig-param">char</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.process_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>Passes a single chracter through the enigma machine</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>char</strong> (<em>str</em>) – Chracter to pass through enigma</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Final chracter, chracter generated at various stages</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple (str, list[str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.reset_from_config_dict">
+<code class="sig-name descname">reset_from_config_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.reset_from_config_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates confirigation dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.rotate_rotor">
+<code class="sig-name descname">rotate_rotor</code><span class="sig-paren">(</span><em class="sig-param">rotor_no</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.rotate_rotor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates rotor with given index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rotor_no</strong> (<em>int</em>) – Index of rotor to rotate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.save_config">
+<code class="sig-name descname">save_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.save_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves confirigation file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.set_config_file_name">
+<code class="sig-name descname">set_config_file_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.set_config_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets new config file name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of confirigation file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.enigma.Enigma.update_config_dict">
+<code class="sig-name descname">update_config_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.enigma.Enigma.update_config_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates confirigation dictionary for rotor position</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Enigma.env">
+<span id="enigma-env-module"></span><h2>Enigma.env module<a class="headerlink" href="#module-Enigma.env" title="Permalink to this headline">¶</a></h2>
+<p>Environment variable(s)</p>
+</div>
+<div class="section" id="module-Enigma.rotor">
+<span id="enigma-rotor-module"></span><h2>Enigma.rotor module<a class="headerlink" href="#module-Enigma.rotor" title="Permalink to this headline">¶</a></h2>
+<p>rotor.py file, Contains Rotor class for Enigma Simulator</p>
+<dl class="class">
+<dt id="Enigma.rotor.Rotor">
+<em class="property">class </em><code class="sig-prename descclassname">Enigma.rotor.</code><code class="sig-name descname">Rotor</code><span class="sig-paren">(</span><em class="sig-param">k_dict=None, alphabet=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'], pos=0, reflection=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Rotor class for Enigma Simulator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k_dict</strong> (<em>dict</em>) – Key Dictionary for the rotor</p></li>
+<li><p><strong>alphabet</strong> (<em>list</em><em>, </em><em>tuple</em>) – Alphabet set</p></li>
+<li><p><strong>pos</strong> (<em>int</em>) – Initial position of the rotor</p></li>
+<li><p><strong>refelection</strong> (<em>bool</em>) – Wheather for reflection board or not</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.animate">
+<code class="sig-name descname">animate</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">pos</em>, <em class="sig-param">dim</em>, <em class="sig-param">color=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">bground=(225</em>, <em class="sig-param">225</em>, <em class="sig-param">225)</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.animate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.animate_reflection">
+<code class="sig-name descname">animate_reflection</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">pos</em>, <em class="sig-param">dim</em>, <em class="sig-param">color=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">bground=(225</em>, <em class="sig-param">225</em>, <em class="sig-param">225)</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.animate_reflection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.draw">
+<code class="sig-name descname">draw</code><span class="sig-paren">(</span><em class="sig-param">surface</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.generate_rotor_board">
+<code class="sig-name descname">generate_rotor_board</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.generate_rotor_board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates confirigation for reflection/plugboard board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.generate_rotor_board_non_reflection">
+<code class="sig-name descname">generate_rotor_board_non_reflection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.generate_rotor_board_non_reflection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates confirigation for rotor board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">char</em>, <em class="sig-param">factor=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves chracter forward</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>char</strong> (<em>str</em><em>[</em><em>0</em><em>]</em>) – Chracter to move effect for different rotor position</p></li>
+<li><p><strong>factor</strong> (<em>int</em>) – Factor to mave chracter with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Moved chracter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str[0]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.rotate">
+<code class="sig-name descname">rotate</code><span class="sig-paren">(</span><em class="sig-param">by=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates rotor with given index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Enigma.rotor.Rotor.update_img">
+<code class="sig-name descname">update_img</code><span class="sig-paren">(</span><em class="sig-param">active=None</em>, <em class="sig-param">active2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Enigma.rotor.Rotor.update_img" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Enigma">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Enigma" title="Permalink to this headline">¶</a></h2>
+<p>__init__.py file for the project Enigma Simulator</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Enigma Simulator</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Kartikei Mittal.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Enigma.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
